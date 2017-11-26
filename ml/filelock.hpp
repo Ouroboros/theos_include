@@ -3,6 +3,13 @@
 class FileLock
 {
 public:
+    enum
+    {
+        NoWait  = 0,
+        Wait    = 1,
+    };
+
+public:
     FileLock()
     {
         this->fd = -1;
@@ -62,7 +69,7 @@ public:
         struct flock fl;
 
         fl = this->getFileLock(F_WRLCK);
-        ret = fcntl(fd, wait ? F_SETLKW : F_SETLK, &fl);
+        ret = fcntl(fd, wait == Wait ? F_SETLKW : F_SETLK, &fl);
         if (ret != 0)
             return ret;
 
@@ -71,7 +78,6 @@ public:
 
     int unlock()
     {
-        int ret;
         struct flock fl;
 
         fl = this->getFileLock(F_UNLCK);
