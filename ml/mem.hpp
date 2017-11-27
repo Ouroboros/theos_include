@@ -5,6 +5,16 @@
 
 extern "C"
 kern_return_t
+mach_vm_read(
+    vm_map_t                target_task,
+    mach_vm_address_t       address,
+    mach_vm_size_t          size,
+    vm_offset_t*            data,
+    mach_msg_type_number_t* dataCnt
+);
+
+extern "C"
+kern_return_t
 mach_vm_protect(
     vm_map_t            target_task,
     mach_vm_address_t   address,
@@ -35,7 +45,7 @@ inline int WriteProcessMemory(void* addr, void* data, int size)
     vm_region_basic_info_data_t info;
     mach_msg_type_number_t      infoCount;
     memory_object_name_t        object;
-    mach_port_t                 task;
+    vm_map_t                    task;
 
     task = mach_task_self();
     pagesize = getpagesize();

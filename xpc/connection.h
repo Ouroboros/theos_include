@@ -149,7 +149,13 @@ __OSX_AVAILABLE_STARTING(__MAC_10_7, __IPHONE_5_0)
 XPC_EXPORT XPC_MALLOC XPC_RETURNS_RETAINED XPC_WARN_RESULT
 xpc_connection_t
 xpc_connection_create(const char * _Nullable name,
-	dispatch_queue_t _Nullable targetq);
+    dispatch_queue_t _Nullable targetq);
+
+xpc_connection_t
+xpc_connection_create_listener(
+    const char * name,
+    dispatch_queue_t _Nullable targetq
+);
 
 /*!
  * @function xpc_connection_create_mach_service
@@ -315,7 +321,18 @@ __OSX_AVAILABLE_STARTING(__MAC_10_7, __IPHONE_5_0)
 XPC_EXPORT XPC_NONNULL_ALL
 void
 xpc_connection_set_event_handler(xpc_connection_t connection,
-	xpc_handler_t handler);
+    xpc_handler_t handler);
+
+
+/*
+    same with xpc_connection_handler_t
+*/
+
+XPC_EXPORT XPC_NONNULL_ALL
+void
+_xpc_connection_set_event_handler_f(xpc_connection_t connection,
+    void (*connection_handler)(xpc_connection_t peer, void* context));
+
 
 /*!
  * @function xpc_connection_activate
