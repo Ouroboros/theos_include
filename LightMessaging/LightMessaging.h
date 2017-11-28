@@ -159,6 +159,11 @@ static inline mach_msg_return_t LMMachMsg(LMConnection *connection, mach_msg_hea
 	}
 }
 
+static inline kern_return_t LMConnectionDestroy(LMConnectionRef connection)
+{
+	return connection->serverPort != MACH_PORT_NULL ? mach_port_deallocate(mach_task_self(), connection->serverPort) : 0;
+}
+
 static inline kern_return_t LMConnectionSendOneWay(LMConnectionRef connection, SInt32 messageId, const void *data, uint32_t length)
 {
 	// Send message
