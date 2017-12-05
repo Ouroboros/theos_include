@@ -2,8 +2,6 @@ CF_EXTERN_C_BEGIN
 
 BOOL MGIsQuestionValid(CFStringRef question);
 
-CFTypeRef MGCopyAnswer(CFStringRef question);
-
 class MGAnswerTypes
 {
     enum
@@ -27,6 +25,7 @@ class MGAnswerTypes
 
 ++*/
 
+CFTypeRef MGCopyAnswer(CFStringRef question, intptr_t unused = 0);
 CFTypeRef MGCopyAnswerInternal(CFStringRef question, int32_t* answerType);
 
 CFBooleanRef MGGetBoolAnswer(CFStringRef question);
