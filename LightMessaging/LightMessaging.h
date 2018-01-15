@@ -39,6 +39,8 @@
 #endif
 #endif
 
+#define LMResponseMsgID			0x59795979
+
 typedef struct {
 	mach_port_t serverPort;
 	name_t serverName;
@@ -296,7 +298,7 @@ static inline kern_return_t LMSendReply(mach_port_t replyPort, const void *data,
 	uint8_t buffer[size];
 	memset(buffer, 0, sizeof(LMMessage));
 	LMMessage *response = (LMMessage *)&buffer[0];
-	response->head.msgh_id = 0;
+	response->head.msgh_id = LMResponseMsgID;
 	response->head.msgh_size = size;
 	response->head.msgh_remote_port = replyPort;
 	response->head.msgh_local_port = MACH_PORT_NULL;
