@@ -26,6 +26,7 @@ class MGAnswerTypes
 ++*/
 
 CFTypeRef MGCopyAnswer(CFStringRef question, intptr_t unused = 0);
+CFTypeRef MGCopyAnswerWithError(CFStringRef question, intptr_t alwaysZero, CFErrorRef *error);
 CFTypeRef MGCopyAnswerInternal(CFStringRef question, int32_t* answerType);
 
 CFBooleanRef MGGetBoolAnswer(CFStringRef question);
