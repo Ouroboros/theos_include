@@ -537,3 +537,51 @@ static inline kern_return_t LMSendImageReply(mach_port_t replyPort, UIImage *ima
 #endif
 
 #endif
+
+#if defined(__OBJC__)
+
+static inline kern_return_t LMSendAndReceiveReply(name_t port, int32_t msgid, NSData* body = nil, NSData** reply = nil)
+{
+    kern_return_t       ret;
+    LMConnection        connection;
+    LMResponseBuffer    buffer = {};
+
+    connection.serverPort = MACH_PORT_NULL;
+    strncpy(connection.serverName, port, countof(connection.serverName));
+
+    if (reply != nil)
+        *reply = nil;
+
+    ret = LMConnectionSendTwoWay(&connection, msgid, body.bytes, body.length, &buffer);
+    if (ret != 0)
+    {
+        LMConnectionDestroy(&connection);
+        return ret;
+    }
+
+    if (buffer.message.head.msgh_id != LMResponseMsgID)
+    {
+        LMResponseBufferFree(&buffer);
+        LMConnectionDestroy(&connection);
+        return -1;
+    }
+
+    void*       data;
+    uint32_t    length;
+
+    data = LMMessageGetData(&buffer.message);
+    length = LMMessageGetDataLength(&buffer.message);
+
+
+    if (reply != nil && length != 0)
+    {
+        *reply = [[NSData alloc] initWithBytes:data length:length];
+    }
+
+    LMResponseBufferFree(&buffer);
+    LMConnectionDestroy(&connection);
+
+    return 0;
+}
+
+#endif // __OBJC__
