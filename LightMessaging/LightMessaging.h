@@ -547,7 +547,7 @@ static inline kern_return_t LMSendAndReceiveReply(name_t port, int32_t msgid, NS
     LMResponseBuffer    buffer = {};
 
     connection.serverPort = MACH_PORT_NULL;
-    strncpy(connection.serverName, port, countof(connection.serverName));
+    strncpy(connection.serverName, port, sizeof(connection.serverName) / sizeof(connection.serverName[0]));
 
     if (reply != nil)
         *reply = nil;
