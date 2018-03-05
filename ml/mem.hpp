@@ -51,7 +51,7 @@ inline int WriteProcessMemory(void* addr, void* data, int size)
     pagesize = getpagesize();
     address = (vm_address_t)addr & ~(pagesize - 1);
 
-#if defined(__arm64__)
+#if defined (__arm64__)
     infoCount  = VM_REGION_BASIC_INFO_COUNT_64;
     status = vm_region_64(
 #else
@@ -76,7 +76,7 @@ inline int WriteProcessMemory(void* addr, void* data, int size)
     protection = info.protection & (PROT_READ | PROT_WRITE | PROT_EXEC);
     address = (vm_address_t)addr & ~(pagesize - 1);
 
-    DbgLog(@"addr = %p, pagesize = %X", (void *)address, pagesize);
+    // DbgLog(@"addr = %p, pagesize = %X", (void *)address, pagesize);
 
     // status = mprotect((void *)address, pagesize, PROT_READ | PROT_WRITE | PROT_EXEC | VM_PROT_COPY);
     status = mach_vm_protect(task, address, pagesize, FALSE, VM_PROT_ALL | VM_PROT_COPY);

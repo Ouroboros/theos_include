@@ -2,14 +2,14 @@
  * Copyright (c) 1998-2014 Apple Computer, Inc. All rights reserved.
  *
  * @APPLE_LICENSE_HEADER_START@
- * 
+ *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apple Public Source License
  * Version 2.0 (the 'License'). You may not use this file except in
  * compliance with the License. Please obtain a copy of the License at
  * http://www.opensource.apple.com/apsl/ and read it before using this
  * file.
- * 
+ *
  * The Original Code and all software distributed under the License are
  * distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
  * EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
@@ -17,7 +17,7 @@
  * FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
  * Please see the License for the specific language governing rights and
  * limitations under the License.
- * 
+ *
  * @APPLE_LICENSE_HEADER_END@
  */
 /*
@@ -50,6 +50,7 @@
 #include <IOKit/IOKitKeys.h>
 
 #include <IOKit/OSMessageNotification.h>
+#include <IOKit/hidsystem/IOHIDUsageTables.h>
 
 #include <AvailabilityMacros.h>
 
@@ -126,7 +127,7 @@ IONotificationPortCreate(
 
 /*! @function IONotificationPortDestroy
     @abstract Destroys a notification object created with IONotificationPortCreate.
-                Also destroys any mach_port's or CFRunLoopSources obatined from 
+                Also destroys any mach_port's or CFRunLoopSources obatined from
                 <code>@link IONotificationPortGetRunLoopSource @/link</code>
                 or <code>@link IONotificationPortGetMachPort @/link</code>
     @param notify A reference to the notification object. */
@@ -137,10 +138,10 @@ IONotificationPortDestroy(
 
 /*! @function IONotificationPortGetRunLoopSource
     @abstract Returns a CFRunLoopSource to be used to listen for notifications.
-    @discussion A notification object may deliver notifications to a CFRunLoop 
+    @discussion A notification object may deliver notifications to a CFRunLoop
                 by adding the run loop source returned by this function to the run loop.
 
-                The caller should not release this CFRunLoopSource. Just call 
+                The caller should not release this CFRunLoopSource. Just call
                 <code>@link IONotificationPortDestroy @/link</code> to dispose of the
                 IONotificationPortRef and the CFRunLoopSource when done.
     @param notify The notification object.
@@ -152,12 +153,12 @@ IONotificationPortGetRunLoopSource(
 
 /*! @function IONotificationPortGetMachPort
     @abstract Returns a mach_port to be used to listen for notifications.
-    @discussion A notification object may deliver notifications to a mach messaging client 
-                if they listen for messages on the port obtained from this function. 
-                Callbacks associated with the notifications may be delivered by calling 
+    @discussion A notification object may deliver notifications to a mach messaging client
+                if they listen for messages on the port obtained from this function.
+                Callbacks associated with the notifications may be delivered by calling
                 IODispatchCalloutFromMessage with messages received.
-                
-                The caller should not release this mach_port_t. Just call 
+
+                The caller should not release this mach_port_t. Just call
                 <code>@link IONotificationPortDestroy @/link</code> to dispose of the
                 mach_port_t and IONotificationPortRef when done.
     @param notify The notification object.
@@ -180,7 +181,7 @@ __OSX_AVAILABLE_STARTING(__MAC_10_6, __IPHONE_4_3);
 
 /*! @function IODispatchCalloutFromMessage
     @abstract Dispatches callback notifications from a mach message.
-    @discussion A notification object may deliver notifications to a mach messaging client, 
+    @discussion A notification object may deliver notifications to a mach messaging client,
                 which should call this function to generate the callbacks associated with the notifications arriving on the port.
     @param unused Not used, set to zero.
     @param msg A pointer to the message received.
@@ -243,14 +244,14 @@ kern_return_t
 IOObjectGetClass(
 	io_object_t	object,
 	io_name_t	className );
-	
+
 /*! @function IOObjectCopyClass
     @abstract Return the class name of an IOKit object.
 	@discussion This function does the same thing as IOObjectGetClass, but returns the result as a CFStringRef.
 	@param object The IOKit object.
 	@result The resulting CFStringRef. This should be released by the caller. If a valid object is not passed in, then NULL is returned.*/
-	
-CFStringRef 
+
+CFStringRef
 IOObjectCopyClass(io_object_t object)
 AVAILABLE_MAC_OS_X_VERSION_10_4_AND_LATER;
 
@@ -260,7 +261,7 @@ AVAILABLE_MAC_OS_X_VERSION_10_4_AND_LATER;
 	@param classname The name of the class as a CFString.
 	@result The resulting CFStringRef. This should be released by the caller. If there is no superclass, or a valid class name is not passed in, then NULL is returned.*/
 
-CFStringRef 
+CFStringRef
 IOObjectCopySuperclassForClass(CFStringRef classname)
 AVAILABLE_MAC_OS_X_VERSION_10_4_AND_LATER;
 
@@ -270,7 +271,7 @@ AVAILABLE_MAC_OS_X_VERSION_10_4_AND_LATER;
 	@param classname The name of the class as a CFString.
 	@result The resulting CFStringRef. This should be released by the caller. If a valid class name is not passed in, then NULL is returned.*/
 
-CFStringRef 
+CFStringRef
 IOObjectCopyBundleIdentifierForClass(CFStringRef classname)
 AVAILABLE_MAC_OS_X_VERSION_10_4_AND_LATER;
 
@@ -618,7 +619,7 @@ IOConnectGetService(
 
 /*! @function IOConnectSetNotificationPort
     @abstract Set a port to receive family specific notifications.
-    @discussion This is a generic method to pass a mach port send right to be be used by family specific notifications. 
+    @discussion This is a generic method to pass a mach port send right to be be used by family specific notifications.
     @param connect The connect handle created by IOServiceOpen.
     @param type The type of notification requested, not interpreted by IOKit and family defined.
     @param port The port to which to send notifications.
@@ -959,7 +960,7 @@ enum {
     @discussion This method creates an IORegistryIterator in the kernel that is set up with options to iterate children of the registry root entry, and to recurse automatically into entries as they are returned, or only when instructed with calls to IORegistryIteratorEnterEntry. The iterator object keeps track of entries that have been recursed into previously to avoid loops.
     @param masterPort The master port obtained from IOMasterPort(). Pass kIOMasterPortDefault to look up the default master port.
     @param plane The name of an existing registry plane. Plane names are defined in IOKitKeys.h, eg. kIOServicePlane.
-    @param options kIORegistryIterateRecursively may be set to recurse automatically into each entry as it is returned from IOIteratorNext calls on the registry iterator. 
+    @param options kIORegistryIterateRecursively may be set to recurse automatically into each entry as it is returned from IOIteratorNext calls on the registry iterator.
     @param iterator A created iterator handle, to be released by the caller when it has finished with it.
     @result A kern_return_t error code. */
 
@@ -1100,7 +1101,7 @@ IORegistryEntryGetRegistryEntryID(
 
 /*! @function IORegistryEntryCreateCFProperties
     @abstract Create a CF dictionary representation of a registry entry's property table.
-    @discussion This function creates an instantaneous snapshot of a registry entry's property table, creating a CFDictionary analogue in the caller's task. Not every object available in the kernel is represented as a CF container; currently OSDictionary, OSArray, OSSet, OSSymbol, OSString, OSData, OSNumber, OSBoolean are created as their CF counterparts. 
+    @discussion This function creates an instantaneous snapshot of a registry entry's property table, creating a CFDictionary analogue in the caller's task. Not every object available in the kernel is represented as a CF container; currently OSDictionary, OSArray, OSSet, OSSymbol, OSString, OSData, OSNumber, OSBoolean are created as their CF counterparts.
     @param entry The registry entry handle whose property table to copy.
     @param properties A CFDictionary is created and returned the caller on success. The caller should release with CFRelease.
     @param allocator The CF allocator to use when creating the CF containers.
@@ -1116,7 +1117,7 @@ IORegistryEntryCreateCFProperties(
 
 /*! @function IORegistryEntryCreateCFProperty
     @abstract Create a CF representation of a registry entry's property.
-    @discussion This function creates an instantaneous snapshot of a registry entry property, creating a CF container analogue in the caller's task. Not every object available in the kernel is represented as a CF container; currently OSDictionary, OSArray, OSSet, OSSymbol, OSString, OSData, OSNumber, OSBoolean are created as their CF counterparts. 
+    @discussion This function creates an instantaneous snapshot of a registry entry property, creating a CF container analogue in the caller's task. Not every object available in the kernel is represented as a CF container; currently OSDictionary, OSArray, OSSet, OSSymbol, OSString, OSData, OSNumber, OSBoolean are created as their CF counterparts.
     @param entry The registry entry handle whose property to copy.
     @param key A CFString specifying the property name.
     @param allocator The CF allocator to use when creating the CF container.
@@ -1132,7 +1133,7 @@ IORegistryEntryCreateCFProperty(
 
 /*! @function IORegistryEntrySearchCFProperty
     @abstract Create a CF representation of a registry entry's property.
-    @discussion This function creates an instantaneous snapshot of a registry entry property, creating a CF container analogue in the caller's task. Not every object available in the kernel is represented as a CF container; currently OSDictionary, OSArray, OSSet, OSSymbol, OSString, OSData, OSNumber, OSBoolean are created as their CF counterparts. 
+    @discussion This function creates an instantaneous snapshot of a registry entry property, creating a CF container analogue in the caller's task. Not every object available in the kernel is represented as a CF container; currently OSDictionary, OSArray, OSSet, OSSymbol, OSString, OSData, OSNumber, OSBoolean are created as their CF counterparts.
 This function will search for a property, starting first with specified registry entry's property table, then iterating recusively through either the parent registry entries or the child registry entries of this entry. Once the first occurrence is found, it will lookup and return the value of the property, using the same semantics as IORegistryEntryCreateCFProperty. The iteration keeps track of entries that have been recursed into previously to avoid loops.
     @param entry The registry entry at which to start the search.
     @param plane The name of an existing registry plane. Plane names are defined in IOKitKeys.h, eg. kIOServicePlane.
@@ -1302,7 +1303,7 @@ IOOpenFirmwarePathMatching(
 /*! @function IORegistryEntryIDMatching
     @abstract Create a matching dictionary that specifies an IOService match based on a registry entry ID.
     @discussion This function creates a matching dictionary that will match a registered, active IOService found with the given registry entry ID. The entry ID for a registry entry is returned by IORegistryEntryGetRegistryEntryID().
-    @param entryID The registry entry ID to be found. 
+    @param entryID The registry entry ID to be found.
     @result The matching dictionary created, is returned on success, or zero on failure. The dictionary is commonly passed to IOServiceGetMatchingServices or IOServiceAddNotification which will consume a reference, otherwise it should be released with CFRelease by the caller. */
 
 CFMutableDictionaryRef
@@ -1315,7 +1316,7 @@ kern_return_t
 IOServiceOFPathToBSDName(mach_port_t		masterPort,
                          const io_name_t	openFirmwarePath,
                          io_name_t		bsdName) DEPRECATED_ATTRIBUTE;
-						 
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /*! @typedef IOAsyncCallback0
@@ -1441,7 +1442,7 @@ IOCompatibiltyNumber(
 
 // Traditional IOUserClient transport routines
 kern_return_t
-IOConnectMethodScalarIScalarO( 
+IOConnectMethodScalarIScalarO(
 	io_connect_t	connect,
         uint32_t	index,
         IOItemCount	scalarInputCount,
