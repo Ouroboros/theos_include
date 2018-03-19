@@ -4,6 +4,7 @@
 #import "ms.hpp"
 #import "filelock.hpp"
 #import "inlinehook.h"
+#import "ps.h"
 
 #define LIGHTMESSAGING_USE_ROCKETBOOTSTRAP 0
 
