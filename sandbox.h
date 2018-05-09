@@ -1,4 +1,8 @@
-#include_next <sandbox.h>
+CF_EXTERN_C_BEGIN
+
+#import <LightMessaging/sandbox.h>
+
+CF_EXTERN_C_END
 
 #define SANDBOX_OPERATION_default                           "default"
 #define SANDBOX_OPERATION_appleevent_send                   "appleevent-send"
