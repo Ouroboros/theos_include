@@ -7,6 +7,7 @@
 #import "ms.hpp"
 #import "filelock.hpp"
 #import "oc.hpp"
+#import "tlshelper.hpp"
 
 #define LIGHTMESSAGING_USE_ROCKETBOOTSTRAP 0
 

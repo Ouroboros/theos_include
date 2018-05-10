@@ -3,30 +3,6 @@
 #import <sys/mman.h>
 #import "ml/mem.hpp"
 
-inline IMP objc_getClassMethod(Class cls, SEL sel)
-{
-    return method_getImplementation(class_getClassMethod(cls, sel));
-}
-
-inline IMP objc_getInstanceMethod(Class cls, SEL sel)
-{
-    return method_getImplementation(class_getInstanceMethod(cls, sel));
-}
-
-inline void MSInlineHookMessageEx(Class _class, SEL message, IMP hook, IMP *old)
-{
-    IMP p;
-
-    p = objc_getInstanceMethod(_class, message);
-    // if (p == NULL)
-    //     p = objc_getClassMethod(_class, message);
-
-    if (p == NULL)
-        return;
-
-    MSHookFunction((void *)p, (void *)hook, (void **)old);
-}
-
 typedef struct
 {
     int64_t x0;
