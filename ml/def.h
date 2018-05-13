@@ -13,3 +13,6 @@
 #if !defined(countof)
     #define countof(x) (sizeof((x)) / sizeof(*(x)))
 #endif /* countof */
+
+#define kNSBooleanTrue (__bridge id)kCFBooleanTrue
+#define kNSBooleanFalse (__bridge id)kCFBooleanFalse
