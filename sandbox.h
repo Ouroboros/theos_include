@@ -2,6 +2,20 @@ CF_EXTERN_C_BEGIN
 
 #import <LightMessaging/sandbox.h>
 
+enum SandboxContainerType
+{
+    AppContainer    = 1,
+};
+
+typedef struct
+{
+    const char* bundleId;
+    const char* path;       // NULL to remove mapping
+
+} SANDBOX_STATE_ITEM, *PSANDBOX_STATE_ITEM;
+
+int sandbox_set_user_state_item(uid_t uid, int type, PSANDBOX_STATE_ITEM item, void* always_null);
+
 CF_EXTERN_C_END
 
 #define SANDBOX_OPERATION_default                           "default"
