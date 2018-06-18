@@ -45,6 +45,14 @@ SecTaskCopyValueForEntitlement(
 );
 
 CF_EXPORT
+CFDictionaryRef
+SecTaskCopyValuesForEntitlements(
+    SecTaskRef  task,
+    CFArrayRef  entitlements,
+    CFErrorRef* error
+);
+
+CF_EXPORT
 CFStringRef
 SecTaskCopySigningIdentifier(
     SecTaskRef  task,

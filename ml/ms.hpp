@@ -39,3 +39,15 @@ inline void MSInlineHookClassMethod(Class cls, SEL cmd, void* hook, void** stub)
     method = objc_getClassMethod(cls, cmd);
     MSHookFunction((void *)method, hook, stub);
 }
+
+inline MSImageRef MSGetImageByAddress(const void* address)
+{
+    Dl_info info;
+
+    if (dladdr(address, &info) != 0)
+    {
+        return info.dli_fbase;
+    }
+
+    return nullptr;
+}
