@@ -10,6 +10,16 @@ inline IMP objc_getInstanceMethod(Class cls, SEL sel)
     return method_getImplementation(class_getInstanceMethod(cls, sel));
 }
 
+inline void* MSGetJumpTargetArm64(const void* address)
+{
+    uint32_t inst = *(uint32_t *)address;
+
+    if ((inst >> 24) != 0x14)
+        return (void *)address;
+
+    return (void *)((uintptr_t)address + ((inst & 0x00FFFFFF) << 2));
+}
+
 inline void MSInlineHookMessageEx(Class _class, SEL message, IMP hook, IMP *old)
 {
     IMP p;
