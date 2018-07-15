@@ -4,6 +4,12 @@ CF_EXTERN_C_BEGIN
 
 const char*** _NSGetEnviron();
 
+#define PROC_PIDPATHINFO 11
+#define PROC_PIDPATHINFO_SIZE  (MAXPATHLEN)
+#define PROC_PIDPATHINFO_MAXSIZE  (4 * MAXPATHLEN)
+
+int proc_pidpath(int pid, void* buffer, uint32_t buffersize);
+
 CF_EXTERN_C_END
 
 inline int system2(const char* cmd)

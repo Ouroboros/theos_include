@@ -1,8 +1,22 @@
-#define DbgLog(args...) { \
-        int __en = errno; \
-        NSLog(args); \
-        errno = __en; \
-    }
+#if DEBUG
+    #define EnableLog(_name) \
+        freopen(_name, "w+", stderr); \
+        dup2(fileno(stderr), fileno(stdout)); \
+        setbuf(stdout, NULL); \
+        setbuf(stderr, NULL);
+
+    #define DbgLog(args...) { \
+            int __en = errno; \
+            NSLog(args); \
+            errno = __en; \
+        }
+
+#else
+
+    #define EnableLog(_name)
+    #define DbgLog(args...)
+
+#endif // DEBUG
 
 #define MSHake2(name) (void *)&$ ## name, (void **) &_ ## name
 
