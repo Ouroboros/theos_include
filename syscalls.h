@@ -13,6 +13,7 @@ _dyld_objc_notify_register(
 
 intptr_t _dyld_get_image_slide(const struct mach_header* mh);
 
+int __fcntl(int fd, int cmd, void* arg);
 int __open_nocancel(const char* path, int oflag, int mode);
 int __open_dprotected_np(const char* path, int flags, int _class, int dpflags, int mode);
 int __open(const char *name, int oflag, int mode);

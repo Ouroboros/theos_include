@@ -30,3 +30,5 @@
 
 #define kNSBooleanTrue (__bridge id)kCFBooleanTrue
 #define kNSBooleanFalse (__bridge id)kCFBooleanFalse
+
+#define GetReturnAddress() ((uintptr_t)__builtin_return_address(0))
