@@ -1,4 +1,5 @@
 #import <substrate.h>
+#import <mach-o/dyld.h>
 
 inline IMP objc_getClassMethod(Class cls, SEL sel)
 {
@@ -57,6 +58,33 @@ inline MSImageRef MSGetImageByAddress(const void* address)
     if (dladdr(address, &info) != 0)
     {
         return info.dli_fbase;
+    }
+
+    return nullptr;
+}
+
+inline MSImageRef MSGetImageByName2(const char* name)
+{
+    int count, len;
+
+    count = _dyld_image_count();
+    if (count == 0)
+        return nullptr;
+
+    len = strlen(name);
+
+    for (int i = 0; i != count; i++)
+    {
+        const char* n = _dyld_get_image_name(i);
+
+        int l = strlen(n);
+
+        if (l < len)
+            continue;
+
+        n = &n[l - len];
+        if (strcmp(n, name) == 0)
+            return _dyld_get_image_header(i);
     }
 
     return nullptr;
