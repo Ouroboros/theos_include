@@ -5,6 +5,12 @@
         setbuf(stdout, NULL); \
         setbuf(stderr, NULL);
 
+    #define EnableLogA(_name) \
+        freopen(_name, "a+", stderr); \
+        dup2(fileno(stderr), fileno(stdout)); \
+        setbuf(stdout, NULL); \
+        setbuf(stderr, NULL);
+
     #define DbgLog(args...) { \
             int __en = errno; \
             NSLog(args); \
@@ -14,6 +20,7 @@
 #else
 
     #define EnableLog(_name)
+    #define EnableLogA(_name)
     #define DbgLog(args...)
 
 #endif // DEBUG

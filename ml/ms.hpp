@@ -63,7 +63,7 @@ inline MSImageRef MSGetImageByAddress(const void* address)
     return nullptr;
 }
 
-inline MSImageRef MSGetImageByName2(const char* name)
+inline MSImageRef MSGetImageByName2(const char* name, int* index = nullptr)
 {
     int count, len;
 
@@ -84,7 +84,12 @@ inline MSImageRef MSGetImageByName2(const char* name)
 
         n = &n[l - len];
         if (strcmp(n, name) == 0)
+        {
+            if (index != nullptr)
+                *index = i;
+
             return _dyld_get_image_header(i);
+        }
     }
 
     return nullptr;
