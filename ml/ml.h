@@ -2,6 +2,7 @@
 #import "sdk.h"
 #import "inlinehook.h"
 #import "ps.h"
+#import "macho.h"
 
 #import "mem.hpp"
 #import "ms.hpp"

@@ -30,6 +30,14 @@ mach_vm_read(
 );
 
 kern_return_t
+mach_vm_write(
+    vm_map_t                target_task,
+    mach_vm_address_t       address,
+    vm_offset_t             data,
+    mach_msg_type_number_t  dataCnt
+);
+
+kern_return_t
 mach_vm_protect(
     vm_map_t            target_task,
     mach_vm_address_t   address,
@@ -131,7 +139,7 @@ get_page_info(
     return kr;
 }
 
-inline kern_return_t WriteProcessMemory(void* addr, void* data, int size)
+inline kern_return_t WriteProcessMemory(mach_port_t task, void* addr, void* data, int size)
 {
     kern_return_t       kr;
     vm_prot_t           prot;
@@ -143,9 +151,8 @@ inline kern_return_t WriteProcessMemory(void* addr, void* data, int size)
     mach_vm_address_t   page_offset;
     mach_vm_address_t   new_page;
     mach_vm_size_t      page_size;
-    mach_port_t         task;
 
-    task = mach_task_self();
+    // task = mach_task_self();
 
     page_addr   = (mach_vm_address_t)addr;
     page_size   = getpagesize();
@@ -158,7 +165,7 @@ inline kern_return_t WriteProcessMemory(void* addr, void* data, int size)
     kr = get_page_info(task, page_start, &prot, &inherit);
     if (kr != KERN_SUCCESS)
     {
-        DbgLog(@"get_page_info failed: %d", kr);
+        DbgLog(@"get_page_info: %d", kr);
         return kr;
     }
 
@@ -171,30 +178,36 @@ inline kern_return_t WriteProcessMemory(void* addr, void* data, int size)
         kr = mach_vm_allocate(task, &new_page, page_size, VM_FLAGS_ANYWHERE);
         if (kr != KERN_SUCCESS)
         {
-            DbgLog(@"mach_vm_allocate failed: %d, page_size = %llX", kr, page_size);
+            DbgLog(@"mach_vm_allocate: %d, page_size = %llX", kr, page_size);
             break;
         }
 
         kr = mach_vm_protect(task, new_page, page_size, FALSE, VM_PROT_DEFAULT | VM_PROT_COPY);
         if (kr != KERN_SUCCESS)
         {
-            DbgLog(@"mach_vm_protect failed: %d", kr);
+            DbgLog(@"mach_vm_protect: %d", kr);
             break;
         }
 
         kr = vm_copy(task, page_start, page_size, new_page);
         if (kr != KERN_SUCCESS)
         {
-            DbgLog(@"vm_copy failed: %d", kr);
+            DbgLog(@"vm_copy: %d", kr);
             break;
         }
 
-        memcpy((void *)(new_page + page_offset), data, size);
+        // memcpy((void *)(new_page + page_offset), data, size);
+        kr = mach_vm_write(task, new_page + page_offset, (vm_offset_t)data, size);
+        if (kr != KERN_SUCCESS)
+        {
+            DbgLog(@"mach_vm_write: %d", kr);
+            break;
+        }
 
         kr = mach_vm_protect(task, new_page, page_size, FALSE, prot);
         if (kr != KERN_SUCCESS)
         {
-            DbgLog(@"mach_vm_protect 2 failed: %d", kr);
+            DbgLog(@"mach_vm_protect 2: %d", kr);
             break;
         }
 
@@ -216,7 +229,7 @@ inline kern_return_t WriteProcessMemory(void* addr, void* data, int size)
 
         if (kr != KERN_SUCCESS)
         {
-            DbgLog(@"mach_vm_remap failed: %d", kr);
+            DbgLog(@"mach_vm_remap: %d", kr);
             break;
         }
 

@@ -19,15 +19,24 @@
 #define PT_DENY_ATTACH 31
 #define PT_FIRSTMACH 32 /* for machine-specific requests */
 
+#if !defined(MAXPATHLEN)
+    #define MAXPATHLEN PATH_MAX
+#endif
+
 CF_EXTERN_C_BEGIN
 
 const char*** _NSGetEnviron();
+
+#define PROC_PIDREGIONPATHINFO      8
+#define PROC_PIDREGIONPATHINFO_SIZE (sizeof(struct proc_regionwithpathinfo))
 
 #define PROC_PIDPATHINFO 11
 #define PROC_PIDPATHINFO_SIZE  (MAXPATHLEN)
 #define PROC_PIDPATHINFO_MAXSIZE  (4 * MAXPATHLEN)
 
 int proc_pidpath(int pid, void* buffer, uint32_t buffersize);
+int proc_regionfilename(int pid, uint64_t address, void* buffer, uint32_t bufferSize);
+int proc_pidinfo(int pid, int flavor, uint64_t arg,  void *buffer, int buffersize);
 
 CF_EXTERN_C_END
 

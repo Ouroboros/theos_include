@@ -59,7 +59,7 @@ inline int MSInlineHook(void* target, void* hook, int jmpReg)
 
     *(void **)&insts[8] = (void *)hook;
 
-    int ret = WriteProcessMemory(target, insts, sizeof(insts));
+    int ret = WriteProcessMemory(mach_task_self(), target, insts, sizeof(insts));
     if (ret != 0)
     {
         DbgLog(@"WriteProcessMemory failed: %d", ret);
