@@ -38,6 +38,14 @@ mach_vm_write(
 );
 
 kern_return_t
+mach_vm_copy(
+    vm_map_t                target_task,
+    mach_vm_address_t       source_address,
+    mach_vm_size_t          size,
+    mach_vm_address_t       dest_address
+);
+
+kern_return_t
 mach_vm_protect(
     vm_map_t            target_task,
     mach_vm_address_t   address,
