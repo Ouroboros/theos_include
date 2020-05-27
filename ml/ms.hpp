@@ -88,9 +88,28 @@ inline MSImageRef MSGetImageByName2(const char* name, int* index = nullptr)
             if (index != nullptr)
                 *index = i;
 
+            // return MSGetImageByName(n);
             return _dyld_get_image_header(i);
         }
     }
 
     return nullptr;
+}
+
+#import "find-syms.mm"
+
+inline void* MSFindSymbol2(MSImageRef image, const char* symbol)
+{
+    if (image == nullptr)
+    {
+        return MSFindSymbol(image, symbol);
+    }
+
+    const char* names[] = { symbol };
+    void *syms[countof(names)];
+    intptr_t dyld_slide = -1;
+
+    find_syms_raw(image, &dyld_slide, names, syms, countof(names));
+
+    return syms[0];
 }
