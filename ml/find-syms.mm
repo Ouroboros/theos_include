@@ -9,6 +9,8 @@
 #include "substitute-internal.h"
 #include "dyld_cache_format.h"
 
+namespace substitute {
+
 static pthread_once_t dyld_inspect_once = PTHREAD_ONCE_INIT;
 /* and its fruits: */
 static uintptr_t (*ImageLoaderMachO_getSlide)(void *);
@@ -277,4 +279,6 @@ ok2: ;
 end:
     if (mapping_size)
         munmap(mapping, mapping_size);
+}
+
 }

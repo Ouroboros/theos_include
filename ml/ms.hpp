@@ -109,7 +109,7 @@ inline void* MSFindSymbol2(MSImageRef image, const char* symbol)
     void *syms[countof(names)];
     intptr_t dyld_slide = -1;
 
-    find_syms_raw(image, &dyld_slide, names, syms, countof(names));
+    substitute::find_syms_raw(image, &dyld_slide, names, syms, countof(names));
 
     return syms[0];
 }
